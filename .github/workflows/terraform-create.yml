@@ -1,17 +1,15 @@
 name: Terraform-create
 
 on:
-  workflow_dispatch:
-    inputs:
-      pub_ssh_key:
-        description: Public ssh key for sshing into ec2 instances
-        required: true
+  pull_request:
+    branches:
+      - master
 permissions:
   id-token: write
   contents: read
 
 env:
-  AWS_REGION: ${{ secrets.AWS_REGION }}
+  AWS_REGION: 'eu-central-1'
 
 jobs:
   terraform:
@@ -25,7 +23,7 @@ jobs:
       uses: aws-actions/configure-aws-credentials@v1
       with:
         role-to-assume: ${{ secrets.AWS_ROLE }}
-        aws-region: ${{ secrets.AWS_REGION }}
+        aws-region: 'eu-central-1'
         role-session-name: GitHub-OIDC-TERRAFORM
 
     - name: Set up Terraform
@@ -40,12 +38,7 @@ jobs:
 
     - name: Terraform Init
       id: init
-      env:
-        AWS_BUCKET_NAME: ${{ secrets.AWS_BUCKET_NAME }}
-        AWS_BUCKET_KEY_NAME: ${{ secrets.AWS_BUCKET_KEY_NAME }}
-        AWS_REGION: ${{ secrets.AWS_REGION }}
-        AWS_TABLE: ${{ secrets.AWS_TABLE }}
-      run: terraform init -backend-config="bucket=${AWS_BUCKET_NAME}" -backend-config="key=${AWS_BUCKET_KEY_NAME}" -backend-config="region=${AWS_REGION}" -backend-config="dynamodb_table=${AWS_TABLE}"
+      run: terraform init
 
     - name: Terraform Validate
       id: validate
@@ -62,10 +55,6 @@ jobs:
 
     - name: Terraform Apply
       run: terraform apply -auto-approve
-      env:
-        TF_VAR_ssh_public_key: ${{ secrets.TF_SSH }}
 
     - name: Terraform Destroy
       run: terraform destroy -auto-approve
-      env:
-        TF_VAR_ssh_public_key: ${{ secrets.TF_SSH }}
