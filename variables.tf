@@ -1,9 +1,9 @@
 variable "public-key-path" {
-  type = string
+  type    = string
   default = "ssh/ec2-bastion.pub"
 }
 variable "private-key-path" {
-  type = string
+  type    = string
   default = "ssh/ec2-bastion.pem"
 }
 variable "key-nam" {

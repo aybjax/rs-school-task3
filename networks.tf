@@ -39,8 +39,8 @@ resource "aws_eip" "bastion_eip" {
 }
 ## associating the EIP for our Bastion host
 resource "aws_eip_association" "ec2-bastion-host-eip-association" {
-    instance_id = aws_instance.bastion.id
-    allocation_id = aws_eip.bastion_eip.id
+  instance_id   = aws_instance.bastion.id
+  allocation_id = aws_eip.bastion_eip.id
 }
 
 resource "aws_route" "private_nat_route" {

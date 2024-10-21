@@ -38,9 +38,9 @@ resource "aws_security_group_rule" "allow_k3s_api_server_in_master" {
   type              = "ingress"
   security_group_id = aws_security_group.sg_master.id
 
-  from_port   = 6443
-  to_port     = 6443
-  protocol    = "-1"
+  from_port                = 6443
+  to_port                  = 6443
+  protocol                 = "-1"
   source_security_group_id = aws_security_group.sg_worker.id
 }
 
@@ -48,9 +48,9 @@ resource "aws_security_group_rule" "allow_kubelet_api_in_worker" {
   type              = "ingress"
   security_group_id = aws_security_group.sg_worker.id
 
-  from_port   = 10250
-  to_port     = 10250
-  protocol    = "-1"
+  from_port                = 10250
+  to_port                  = 10250
+  protocol                 = "-1"
   source_security_group_id = aws_security_group.sg_master.id
 }
 
